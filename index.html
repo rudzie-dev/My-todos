@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Todos</title>
 
-<!-- PWA -->
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#f5f4f0">
+<meta name="theme-color" content="#f7f7f5">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Todos">
@@ -15,300 +14,428 @@
 <link rel="icon" type="image/svg+xml" href="/icon.svg">
 <link rel="icon" type="image/png" href="/icon.png">
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --bg: #f5f4f0;
-    --card: #ffffff;
-    --text: #1a1a1a;
-    --muted: #b0b0b0;
-    --c1: #ff6b6b;
-    --c2: #ffa94d;
-    --c3: #69db7c;
-    --c4: #74c0fc;
-    --c5: #da77f2;
-    --c6: #ff8cc8;
-    --radius: 20px;
-    --wrap: 560px;
-  }
+:root {
+  --bg:     #f7f7f5;
+  --card:   #ffffff;
+  --text:   #111111;
+  --sub:    #999999;
+  --border: #ebebeb;
+  --c1: #ff6b6b;
+  --c2: #ffa94d;
+  --c3: #51cf66;
+  --c4: #339af0;
+  --c5: #cc5de8;
+  --c6: #f783ac;
 
-  html, body {
-    height: 100%;
-  }
+  /* Spatial system — 4pt base */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s8: 32px;
+  --s10: 40px;
+  --s12: 48px;
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-full: 999px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.05);
+}
+
+html { height: 100%; }
+
+body {
+  font-family: 'Nunito', -apple-system, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Page shell ── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: var(--s12) var(--s4) var(--s12);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ── Header ── */
+.hd {
+  margin-bottom: var(--s2);
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.sub {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--sub);
+  margin-top: var(--s1);
+  margin-bottom: var(--s6);
+  letter-spacing: 0.01em;
+}
+
+/* ── Add bar ── */
+.add-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-bottom: var(--s5);
+}
+
+.add-bar input {
+  flex: 1;
+  height: 52px;
+  padding: 0 var(--s5);
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.18s, box-shadow 0.18s;
+  -webkit-appearance: none;
+}
+
+.add-bar input::placeholder {
+  color: var(--sub);
+  font-weight: 600;
+}
+
+.add-bar input:focus {
+  border-color: var(--c4);
+  box-shadow: 0 0 0 3px rgba(51,154,240,0.14), var(--shadow-sm);
+}
+
+.btn-add {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--text);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.14s cubic-bezier(.34,1.56,.64,1), background 0.15s;
+}
+
+.btn-add:hover  { background: #2a2a2a; transform: scale(1.08); }
+.btn-add:active { transform: scale(0.92); }
+
+/* ── List ── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  background: var(--card);
+  border-radius: var(--r-lg);
+  padding: var(--s4) var(--s4) var(--s4) var(--s4);
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid var(--border);
+  transition: opacity 0.22s, transform 0.22s;
+  animation: pop-in 0.26s cubic-bezier(.34,1.56,.64,1) both;
+  min-height: 60px;
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.92) translateY(4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+.item.done {
+  opacity: 0.42;
+}
+
+.item.done .label {
+  text-decoration: line-through;
+  color: var(--sub);
+}
+
+/* ── Circle ── */
+.circle {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.16s, transform 0.14s cubic-bezier(.34,1.56,.64,1);
+  padding: 0;
+}
+
+.circle:hover  { transform: scale(1.14); }
+.circle:active { transform: scale(0.9); }
+.circle.checked { background: currentColor; border-color: currentColor; }
+.circle.checked svg { stroke: #fff !important; }
+
+/* ── Label ── */
+.label {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: text;
+  word-break: break-word;
+  color: var(--text);
+  user-select: none;
+}
+
+.edit-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text);
+  caret-color: var(--c4);
+  padding: 0;
+}
+
+/* ── Delete btn ── */
+.btn-del {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--sub);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.14s, background 0.14s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.item:hover .btn-del,
+.item:focus-within .btn-del {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Always show on touch devices */
+@media (hover: none) {
+  .btn-del { opacity: 1; pointer-events: all; }
+}
+
+.btn-del:hover { color: var(--c1); background: rgba(255,107,107,0.1); }
+
+/* ── Empty state ── */
+.empty {
+  text-align: center;
+  color: var(--sub);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: var(--s12) 0 var(--s8);
+  letter-spacing: 0.01em;
+}
+
+/* ── Desktop ── */
+@media (min-width: 768px) {
+  .page {
+    padding: 72px var(--s8) 72px;
     align-items: flex-start;
-    padding: clamp(24px, 5vw, 64px) clamp(16px, 4vw, 40px);
-    color: var(--text);
   }
 
   .wrap {
-    width: 100%;
-    max-width: var(--wrap);
-  }
-
-  /* ── Header ── */
-  .header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: clamp(4px, 1vw, 8px);
+    max-width: 600px;
   }
 
   h1 {
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 1;
+    font-size: 2.5rem;
   }
 
   .sub {
-    font-size: clamp(0.8rem, 1.5vw, 0.95rem);
-    color: var(--muted);
-    margin-bottom: clamp(20px, 3vw, 36px);
-    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: var(--s8);
   }
 
-  /* ── Add bar ── */
   .add-bar {
-    display: flex;
-    gap: clamp(8px, 1.5vw, 14px);
-    margin-bottom: clamp(16px, 2.5vw, 28px);
+    gap: var(--s4);
+    margin-bottom: var(--s6);
   }
 
   .add-bar input {
-    flex: 1;
-    padding: clamp(12px, 2vw, 18px) clamp(16px, 2.5vw, 24px);
-    border-radius: 50px;
-    border: 2.5px solid transparent;
-    background: var(--card);
-    font-family: 'Nunito', sans-serif;
-    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
-    font-weight: 600;
-    color: var(--text);
-    outline: none;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    min-height: clamp(48px, 6vw, 60px);
+    height: 58px;
+    font-size: 1rem;
+    padding: 0 var(--s6);
   }
-
-  .add-bar input:focus {
-    border-color: var(--c4);
-    box-shadow: 0 2px 20px rgba(116,192,252,0.28);
-  }
-
-  .add-bar input::placeholder { color: var(--muted); }
 
   .btn-add {
-    width: clamp(48px, 6vw, 60px);
-    height: clamp(48px, 6vw, 60px);
-    border-radius: 50%;
-    border: none;
-    background: var(--text);
-    color: #fff;
-    cursor: pointer;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.15s, background 0.2s;
-    box-shadow: 0 2px 14px rgba(0,0,0,0.18);
+    width: 58px;
+    height: 58px;
   }
-
-  .btn-add:hover { transform: scale(1.1); background: #333; }
-  .btn-add:active { transform: scale(0.93); }
-
-  /* ── List ── */
-  .list { display: flex; flex-direction: column; gap: clamp(8px, 1.2vw, 12px); }
 
   .item {
-    display: flex;
-    align-items: center;
-    gap: clamp(12px, 2vw, 18px);
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: clamp(12px, 2vw, 18px) clamp(14px, 2.5vw, 22px);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.055);
-    transition: transform 0.18s, opacity 0.25s;
-    animation: pop-in 0.28s cubic-bezier(.34,1.56,.64,1);
+    padding: var(--s4) var(--s5);
+    gap: var(--s5);
+    border-radius: var(--r-xl);
   }
 
-  @keyframes pop-in {
-    from { transform: scale(0.88); opacity: 0; }
-    to   { transform: scale(1);    opacity: 1; }
-  }
-
-  .item.done { opacity: 0.45; }
-  .item.done .label { text-decoration: line-through; color: var(--muted); }
-
-  /* ── Circle ── */
   .circle {
-    width: clamp(26px, 3.5vw, 34px);
-    height: clamp(26px, 3.5vw, 34px);
-    border-radius: 50%;
-    border: 2.5px solid currentColor;
-    flex-shrink: 0;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.18s, transform 0.15s;
-    background: none;
-    padding: 0;
+    width: 30px;
+    height: 30px;
   }
 
-  .circle:hover { transform: scale(1.15); }
-  .circle.checked { background: currentColor; }
-  .circle.checked svg { stroke: #fff; }
-
-  /* ── Label ── */
-  .label {
-    flex: 1;
-    font-size: clamp(0.93rem, 1.8vw, 1.05rem);
-    font-weight: 700;
-    line-height: 1.4;
-    cursor: pointer;
-    word-break: break-word;
+  .label, .edit-input {
+    font-size: 1rem;
   }
 
-  .edit-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-family: 'Nunito', sans-serif;
-    font-size: clamp(0.93rem, 1.8vw, 1.05rem);
-    font-weight: 700;
-    color: var(--text);
-    border-bottom: 2.5px solid var(--c4);
-    padding-bottom: 3px;
-  }
+  .list { gap: var(--s3); }
+}
 
-  /* ── Delete ── */
-  .btn-del {
-    background: none; border: none;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    transition: color 0.15s, background 0.15s;
-    flex-shrink: 0;
-  }
+/* ── Install banner ── */
+#install-banner {
+  position: fixed;
+  top: var(--s4);
+  right: var(--s4);
+  background: #111;
+  color: #fff;
+  border-radius: var(--r-xl);
+  padding: var(--s4) var(--s4) var(--s4) var(--s5);
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  z-index: 999;
+  max-width: 300px;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.96);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(.34,1.4,.64,1);
+  pointer-events: none;
+}
 
-  .btn-del:hover { color: var(--c1); background: #ff6b6b18; }
+#install-banner.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
 
-  .empty {
-    text-align: center;
-    color: var(--muted);
-    font-size: clamp(0.85rem, 1.5vw, 1rem);
-    font-weight: 600;
-    padding: clamp(28px, 4vw, 48px) 0;
-  }
+#install-banner .b-icon { display: flex; flex-shrink: 0; color: var(--c4); }
+#install-banner .b-text { flex: 1; line-height: 1.35; }
+#install-banner .b-text small {
+  display: block;
+  font-weight: 600;
+  color: #666;
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
 
-  /* ── Install banner ── */
-  #install-banner {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    background: #1a1a1a;
-    color: #fff;
-    border-radius: 18px;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-    font-size: 0.88rem;
-    font-weight: 700;
-    z-index: 999;
-    max-width: 280px;
-    opacity: 0;
-    transform: translateY(-14px) scale(0.95);
-    transition: opacity 0.32s ease, transform 0.32s cubic-bezier(.34,1.4,.64,1);
-    pointer-events: none;
-  }
+#btn-install {
+  background: var(--c4);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-full);
+  padding: 6px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.14s, transform 0.14s;
+}
 
-  #install-banner.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: all;
-  }
+#btn-install:hover { opacity: 0.85; transform: scale(1.04); }
 
-  #install-banner .b-icon { flex-shrink: 0; display: flex; }
-  #install-banner .b-text { line-height: 1.35; flex: 1; }
-  #install-banner .b-text small {
-    display: block;
-    font-weight: 600;
-    color: #888;
-    font-size: 0.74rem;
-    margin-top: 2px;
-  }
+#btn-dismiss {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s1);
+  flex-shrink: 0;
+  border-radius: 50%;
+  transition: color 0.14s;
+}
 
-  #btn-install {
-    background: var(--c4);
-    color: #1a1a1a;
-    border: none;
-    border-radius: 50px;
-    padding: 7px 14px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 800;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: background 0.15s, transform 0.15s;
-  }
+#btn-dismiss:hover { color: #fff; }
 
-  #btn-install:hover { background: #a5d8ff; transform: scale(1.05); }
+/* ── iOS tip ── */
+#ios-tip {
+  position: fixed;
+  top: var(--s4);
+  right: var(--s4);
+  background: #111;
+  color: #fff;
+  border-radius: var(--r-xl);
+  padding: var(--s5) var(--s5);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.6;
+  z-index: 999;
+  max-width: 240px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+}
 
-  #btn-dismiss {
-    background: none; border: none;
-    color: #555;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    padding: 3px;
-    flex-shrink: 0;
-    transition: color 0.15s;
-    border-radius: 50%;
-  }
+#ios-tip.show {
+  display: block;
+  animation: pop-in 0.26s cubic-bezier(.34,1.56,.64,1) both;
+}
 
-  #btn-dismiss:hover { color: #fff; }
+#ios-tip strong { font-weight: 800; }
 
-  /* ── iOS tip ── */
-  #ios-tip {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    background: #1a1a1a;
-    color: #fff;
-    border-radius: 18px;
-    padding: 16px 20px;
-    font-size: 0.88rem;
-    font-weight: 600;
-    line-height: 1.6;
-    z-index: 999;
-    max-width: 250px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-    display: none;
-  }
-
-  #ios-tip.show { display: block; animation: pop-in 0.28s cubic-bezier(.34,1.56,.64,1); }
-  #ios-tip strong { font-weight: 800; }
-  #ios-tip .close {
-    display: block;
-    margin-top: 10px;
-    text-align: right;
-    color: var(--c4);
-    cursor: pointer;
-    font-weight: 800;
-    font-size: 0.82rem;
-  }
+#ios-tip .close {
+  display: block;
+  margin-top: var(--s3);
+  text-align: right;
+  color: var(--c4);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
 </style>
 </head>
 <body>
@@ -320,194 +447,201 @@
     <small>Works offline too</small>
   </div>
   <button id="btn-install">Add</button>
-  <button id="btn-dismiss" id="banner-dismiss-icon"></button>
+  <button id="btn-dismiss"></button>
 </div>
 
 <div id="ios-tip">
   <strong>Add to Home Screen</strong><br>
-  Tap <strong>Share</strong> then <strong>"Add to Home Screen"</strong>
+  Tap <strong>Share ↑</strong> then <strong>"Add to Home Screen"</strong>
   <span class="close" id="ios-close">Got it</span>
 </div>
 
-<div class="wrap">
-  <div class="header">
-    <h1>My Todos</h1>
-  </div>
-  <p class="sub" id="sub">loading…</p>
+<div class="page">
+  <div class="wrap">
+    <div class="hd">
+      <h1>My Todos</h1>
+    </div>
+    <p class="sub" id="sub">loading…</p>
 
-  <div class="add-bar">
-    <input id="new-input" type="text" placeholder="what needs doing?" maxlength="120">
-    <button class="btn-add" id="btn-add" title="Add"></button>
-  </div>
+    <div class="add-bar">
+      <input id="new-input" type="text" placeholder="what needs doing?" maxlength="120" autocomplete="off">
+      <button class="btn-add" id="btn-add" title="Add"></button>
+    </div>
 
-  <div class="list" id="list"></div>
+    <div class="list" id="list"></div>
+  </div>
 </div>
 
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
 
-  // ── Lucide icons helper ──
-  function icon(name, size, color) {
-    const el = document.createElement('span');
-    el.style.display = 'flex';
-    el.dataset.lucide = name;
-    el.style.width = size + 'px';
-    el.style.height = size + 'px';
-    if (color) el.style.color = color;
-    return el;
-  }
+/* ── Icons ── */
+function mkIcon(name, size) {
+  const s = document.createElement('span');
+  s.dataset.lucide = name;
+  s.style.cssText = `display:flex;width:${size}px;height:${size}px;pointer-events:none`;
+  return s;
+}
 
-  // Inject lucide icons into static elements after DOM ready
-  function initIcons() {
-    document.getElementById('btn-add').appendChild(icon('plus', 22));
-    document.getElementById('banner-icon').appendChild(icon('smartphone', 20));
-    document.getElementById('btn-dismiss').appendChild(icon('x', 16));
-    lucide.createIcons();
-  }
+function initStaticIcons() {
+  document.getElementById('btn-add').appendChild(mkIcon('plus', 22));
+  document.getElementById('banner-icon').appendChild(mkIcon('smartphone', 18));
+  document.getElementById('btn-dismiss').appendChild(mkIcon('x', 15));
+  lucide.createIcons();
+}
 
-  // ── Install Banner ──
-  const banner = document.getElementById('install-banner');
-  const iosTip = document.getElementById('ios-tip');
-  let deferredPrompt = null;
+/* ── Install banner ── */
+const banner = document.getElementById('install-banner');
+const iosTip = document.getElementById('ios-tip');
+let deferredPrompt = null;
 
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  const dismissed = sessionStorage.getItem('install-dismissed');
+const isIOS        = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const dismissed    = sessionStorage.getItem('install-dismissed');
 
-  if (!isStandalone && !dismissed) {
-    if (isIOS) {
-      setTimeout(() => iosTip.classList.add('show'), 1500);
-    } else {
-      window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault();
-        deferredPrompt = e;
-        setTimeout(() => banner.classList.add('show'), 1500);
-      });
-    }
-  }
-
-  document.getElementById('btn-install').onclick = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    banner.classList.remove('show');
-    if (outcome === 'accepted') sessionStorage.setItem('install-dismissed', '1');
-  };
-
-  document.getElementById('btn-dismiss').onclick = () => {
-    banner.classList.remove('show');
-    sessionStorage.setItem('install-dismissed', '1');
-  };
-
-  document.getElementById('ios-close').onclick = () => {
-    iosTip.classList.remove('show');
-    sessionStorage.setItem('install-dismissed', '1');
-  };
-
-  // ── App ──
-  const COLORS = ['--c1','--c2','--c3','--c4','--c5','--c6'];
-  let todos = JSON.parse(localStorage.getItem('todos') || '[]');
-
-  const listEl = document.getElementById('list');
-  const input  = document.getElementById('new-input');
-  const sub    = document.getElementById('sub');
-
-  function colorFor(i) {
-    return getComputedStyle(document.documentElement).getPropertyValue(COLORS[i % COLORS.length]).trim();
-  }
-
-  function save() { localStorage.setItem('todos', JSON.stringify(todos)); }
-
-  function updateSub() {
-    const left = todos.filter(t => !t.done).length;
-    sub.textContent = left === 0 && todos.length > 0 ? 'all done! 🎉' : `${left} left to do`;
-  }
-
-  function render() {
-    listEl.innerHTML = '';
-    if (!todos.length) {
-      listEl.innerHTML = '<p class="empty">nothing here yet 🌿</p>';
-      updateSub(); return;
-    }
-
-    todos.forEach((t, i) => {
-      const color = colorFor(i);
-      const div = document.createElement('div');
-      div.className = 'item' + (t.done ? ' done' : '');
-
-      // Circle
-      const circle = document.createElement('button');
-      circle.className = 'circle' + (t.done ? ' checked' : '');
-      circle.style.color = color;
-      circle.title = t.done ? 'Undo' : 'Mark done';
-      if (t.done) {
-        const chk = icon('check', 14);
-        circle.appendChild(chk);
-      }
-      circle.onclick = () => { t.done = !t.done; save(); render(); };
-
-      // Label
-      const label = document.createElement('span');
-      label.className = 'label';
-      label.textContent = t.text;
-      label.title = 'Double-click to edit';
-      label.ondblclick = () => startEdit(i, div);
-
-      // Delete
-      const del = document.createElement('button');
-      del.className = 'btn-del';
-      del.title = 'Delete';
-      del.appendChild(icon('trash-2', 17));
-      del.onclick = () => {
-        div.style.transform = 'scale(0.85)';
-        div.style.opacity = '0';
-        setTimeout(() => { todos.splice(i, 1); save(); render(); }, 220);
-      };
-
-      div.append(circle, label, del);
-      listEl.appendChild(div);
+if (!isStandalone && !dismissed) {
+  if (isIOS) {
+    setTimeout(() => iosTip.classList.add('show'), 2000);
+  } else {
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setTimeout(() => banner.classList.add('show'), 2000);
     });
+  }
+}
 
-    lucide.createIcons();
+document.getElementById('btn-install').onclick = async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  banner.classList.remove('show');
+  if (outcome === 'accepted') sessionStorage.setItem('install-dismissed', '1');
+};
+
+document.getElementById('btn-dismiss').onclick = () => {
+  banner.classList.remove('show');
+  sessionStorage.setItem('install-dismissed', '1');
+};
+
+document.getElementById('ios-close').onclick = () => {
+  iosTip.classList.remove('show');
+  sessionStorage.setItem('install-dismissed', '1');
+};
+
+/* ── App ── */
+const COLORS = ['--c1','--c2','--c3','--c4','--c5','--c6'];
+let todos = JSON.parse(localStorage.getItem('todos') || '[]');
+
+const listEl = document.getElementById('list');
+const input  = document.getElementById('new-input');
+const subEl  = document.getElementById('sub');
+
+function colorFor(i) {
+  return getComputedStyle(document.documentElement).getPropertyValue(COLORS[i % COLORS.length]).trim();
+}
+
+function save() { localStorage.setItem('todos', JSON.stringify(todos)); }
+
+function updateSub() {
+  const left = todos.filter(t => !t.done).length;
+  subEl.textContent = todos.length === 0
+    ? 'nothing here yet'
+    : left === 0
+      ? 'all done 🎉'
+      : `${left} remaining`;
+}
+
+function render() {
+  listEl.innerHTML = '';
+
+  if (!todos.length) {
+    listEl.innerHTML = '<p class="empty">Add your first todo above ↑</p>';
     updateSub();
+    return;
   }
 
-  function startEdit(i, div) {
-    const labelEl = div.querySelector('.label');
-    const ei = document.createElement('input');
-    ei.className = 'edit-input';
-    ei.value = todos[i].text;
-    labelEl.replaceWith(ei);
-    ei.focus();
-    const commit = () => {
-      const v = ei.value.trim();
-      if (v) todos[i].text = v;
-      save(); render();
+  todos.forEach((t, i) => {
+    const color = colorFor(i);
+    const div = document.createElement('div');
+    div.className = 'item' + (t.done ? ' done' : '');
+
+    const circle = document.createElement('button');
+    circle.className = 'circle' + (t.done ? ' checked' : '');
+    circle.style.color = color;
+    circle.setAttribute('aria-label', t.done ? 'Mark undone' : 'Mark done');
+    if (t.done) circle.appendChild(mkIcon('check', 13));
+    circle.onclick = () => { t.done = !t.done; save(); render(); };
+
+    const label = document.createElement('span');
+    label.className = 'label';
+    label.textContent = t.text;
+    label.ondblclick = () => startEdit(i, div);
+    label.ontouchstart = (() => {
+      let timer;
+      return () => {
+        timer = setTimeout(() => startEdit(i, div), 500);
+        label.ontouchend = () => clearTimeout(timer);
+      };
+    })();
+
+    const del = document.createElement('button');
+    del.className = 'btn-del';
+    del.setAttribute('aria-label', 'Delete');
+    del.appendChild(mkIcon('trash-2', 15));
+    del.onclick = () => {
+      div.style.opacity = '0';
+      div.style.transform = 'scale(0.9)';
+      setTimeout(() => { todos.splice(i, 1); save(); render(); }, 200);
     };
-    ei.onblur = commit;
-    ei.onkeydown = e => { if (e.key === 'Enter') ei.blur(); if (e.key === 'Escape') render(); };
-  }
 
-  function addTodo() {
-    const text = input.value.trim();
-    if (!text) return;
-    todos.push({ text, done: false });
-    input.value = '';
-    save();
-    render();
-    const btn = document.getElementById('btn-add');
-    btn.style.transform = 'scale(1.22)';
-    setTimeout(() => btn.style.transform = '', 200);
-  }
+    div.append(circle, label, del);
+    listEl.appendChild(div);
+  });
 
-  document.getElementById('btn-add').onclick = addTodo;
-  input.onkeydown = e => { if (e.key === 'Enter') addTodo(); };
+  lucide.createIcons();
+  updateSub();
+}
 
-  // Init
-  window.addEventListener('load', () => { initIcons(); render(); });
+function startEdit(i, div) {
+  const labelEl = div.querySelector('.label');
+  const ei = document.createElement('input');
+  ei.className = 'edit-input';
+  ei.value = todos[i].text;
+  labelEl.replaceWith(ei);
+  ei.focus();
+  ei.select();
+  const commit = () => {
+    const v = ei.value.trim();
+    if (v) todos[i].text = v;
+    save(); render();
+  };
+  ei.onblur = commit;
+  ei.onkeydown = e => {
+    if (e.key === 'Enter') ei.blur();
+    if (e.key === 'Escape') render();
+  };
+}
+
+function addTodo() {
+  const text = input.value.trim();
+  if (!text) return;
+  todos.push({ text, done: false });
+  input.value = '';
+  save();
+  render();
+  const btn = document.getElementById('btn-add');
+  btn.style.transform = 'scale(1.18)';
+  setTimeout(() => btn.style.transform = '', 180);
+}
+
+document.getElementById('btn-add').onclick = addTodo;
+input.onkeydown = e => { if (e.key === 'Enter') addTodo(); };
+
+window.addEventListener('load', () => { initStaticIcons(); render(); });
 </script>
 </body>
 </html>
